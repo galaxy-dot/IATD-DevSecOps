@@ -73,8 +73,9 @@ class User(db.Model):
     @staticmethod
     def get_user(username):
         if vuln: 
-            user_query = f"SELECT * FROM users WHERE username = '{username}'"
-            print(user_query)
+            # user_query = f"SELECT * FROM users WHERE username = '{username}'"
+            fin_query = User.query.filter_by(username=username).first()
+            # print(user_query)
             query = vuln_conn.cursor().executescript(user_query)
             ret = query.fetchone()
             if ret:
