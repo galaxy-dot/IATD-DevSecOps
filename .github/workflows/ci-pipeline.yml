@@ -34,6 +34,7 @@ jobs:
       with:
         # Disabling shallow clones is recommended for improving the relevancy of reporting
         fetch-depth: 0
+        args: -X
     - name: Test SonarQube URL via CLI
       run: |
         curl -v "${{ secrets.SONAR_URL }}/api/system/status"
