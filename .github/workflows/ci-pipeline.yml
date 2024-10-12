@@ -24,7 +24,7 @@ jobs:
         id: artifact-upload-step
         with:
           name: test-results
-          path: junit/test-results.xml
+          path: junit/test-results.xml  
   sonarqube:
     needs: test
     if: true
@@ -34,6 +34,9 @@ jobs:
       with:
         # Disabling shallow clones is recommended for improving the relevancy of reporting
         fetch-depth: 0
+    - name: Test SonarQube URL via CLI
+      run: |
+        curl -v "${{ secrets.SONAR_URL }}/api/system/status"
     - name: SonarQube Scan
       uses: sonarsource/sonarqube-scan-action@master
       env:
