@@ -78,6 +78,8 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-labs:dast-test  
+      - name: Check OpenAPI spec file in Docker container
+        run: docker run -v /home/runner/work/IATD-DevSecOps/IATD-DevSecOps:/zap/wrk/:rw --network=host ghcr.io/zaproxy/zaproxy:stable ls -la /zap/wrk/openapi_specs/
       - name: ZAP Scan
         uses: zaproxy/action-api-scan@v0.6.0
         with:
