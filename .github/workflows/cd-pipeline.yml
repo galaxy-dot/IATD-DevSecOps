@@ -6,6 +6,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -19,6 +21,10 @@ jobs:
           resourceGroup: devsecops-lab
           location: australiaeast
           targetPort: 5000
+
+      - name: List workspace files
+        run: ls -R $GITHUB_WORKSPACE
+
       - name: Deploy DAST Container App
         uses: azure/container-apps-deploy-action@v1
         with:
