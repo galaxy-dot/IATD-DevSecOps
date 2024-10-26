@@ -34,7 +34,7 @@ jobs:
           path: junit/test-results.xml
   sonarqube:
     needs: test
-    if: false
+    if: true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -60,7 +60,7 @@ jobs:
        path: sonarqube-report.json
   dast:
     needs: [test]
-    if: false
+    if: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -138,7 +138,7 @@ jobs:
             name: image-report
             path: ${{ steps.image-scan.outputs.json }}
   build:
-    needs: [test,sonarqube,dast]
+    needs: [test,sonarqube,dast,image-scan]
     permissions:
         id-token: write    
     runs-on: ubuntu-latest
@@ -183,6 +183,10 @@ jobs:
         with:
           name: zap-report
           path: ${{github.workspace}}
+      - uses: actions/download-artifact@v4
+        with:
+          name: image-report
+          path: ${{github.workspace}}
       - name: Upload reports
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -195,3 +199,6 @@ jobs:
           echo "Sonar upload: $SONAR_RESPONSE"
           ZAP_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN"  --data-binary @$GITHUB_WORKSPACE/report_json.json https://devsecops-ver.azurewebsites.net/api/week3-zap-report)
           echo "Zap upload: $ZAP_RESPONSE"
+
+          IMAGE_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/results.json https://devsecops-ver.azurewebsites.net/api/week4-image-report)
+          echo "Image report upload: $IMAGE_RESPONSE"
