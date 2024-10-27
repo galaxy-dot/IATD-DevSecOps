@@ -185,8 +185,7 @@ jobs:
         
         echo "All security gates passed"  
   build:
-    # needs: [test,sonarqube,dast,image-scan]
-    needs: []
+    needs: [test,sonarqube,dast,image-scan,security_gate]
     if: true
     permissions:
         id-token: write    
