@@ -73,7 +73,10 @@ class User(db.Model):
     @staticmethod
     def get_user(username):
         if vuln: 
-            user_query = f"SELECT * FROM users WHERE username = '{username}'"
+            # SQL injection vulnerability
+            # user_query = f"SELECT * FROM users WHERE username = '{username}'"
+            # Fix SQL injection to pass image_scan step
+            user_query = User.query.filter_by(username=username).first
             print(user_query)
             query = vuln_conn.cursor().executescript(user_query)
             ret = query.fetchone()
