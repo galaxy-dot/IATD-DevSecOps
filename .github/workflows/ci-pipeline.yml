@@ -138,7 +138,7 @@ jobs:
             name: image-report
             path: ${{ steps.image-scan.outputs.json }}
   security_gate:
-    needs: [image-scan]
+    needs: [sonarqube,dast,image-scan]
     if: true
     runs-on: ubuntu-latest
     steps:
