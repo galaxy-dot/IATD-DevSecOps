@@ -59,7 +59,7 @@ jobs:
        name: sonarqube-report
        path: sonarqube-report.json
   dast:
-    needs: [test]
+    needs: test
     if: true
     runs-on: ubuntu-latest
     steps:
@@ -139,7 +139,7 @@ jobs:
             path: ${{ steps.image-scan.outputs.json }}
   security_gate:
     needs: [sonarqube, dast, image-scan]
-    if: false
+    if: true
     runs-on: ubuntu-latest
     steps:
     - name: Download sonarqube-report
@@ -185,7 +185,7 @@ jobs:
         
         echo "All security gates passed"  
   build:
-    needs: [test,sonarqube,dast,image-scan]
+    needs: [test,sonarqube,dast,image-scan,security_gate]
     if: true
     permissions:
         id-token: write    
